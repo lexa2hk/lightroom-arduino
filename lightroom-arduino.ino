@@ -1,3 +1,10 @@
+const uint8_t bitmap_32x32[] PROGMEM = {
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xC0, 0xC0, 0xE0, 0xF0, 0x70, 0x70, 0x30, 0x30, 0x30, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF0, 0x70, 0x30, 0x30, 0x20, 0x00, 0x00,
+  0x00, 0x30, 0x78, 0xFC, 0x7F, 0x3F, 0x0F, 0x0F, 0x1F, 0x3C, 0x78, 0xF0, 0xE0, 0xC0, 0x80, 0x80, 0x80, 0x40, 0xE0, 0xF0, 0xF8, 0xFC, 0xFF, 0x7F, 0x33, 0x13, 0x1E, 0x1C, 0x1C, 0x0E, 0x07, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xC0, 0xE0, 0xF0, 0xF9, 0xF7, 0xEF, 0x5F, 0x3F, 0x7F, 0xFE, 0xFD, 0xFB, 0xF1, 0xE0, 0xC0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x1E, 0x33, 0x33, 0x1F, 0x0F, 0x07, 0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x07, 0x0F, 0x1F, 0x3F, 0x1F, 0x0E, 0x04, 0x00, 0x00, 0x00, 0x00,
+};
+
 #include <MIDI.h>
 #include <GyverOLED.h>
 #include <EncButton.h>
@@ -32,21 +39,19 @@ int _velocity_prev;
 int _channel_prev;
 
 int switch_state;
-// \ To be moved into library
+
 
 Button switch_button(SWITCH_PIN);
 
 EncButton eb(S1_PIN,S2_PIN, KEY_PIN);
 
 
-void setup() {
 
-  // Serial.begin(115200);
+
+void setup() {
 
   switch_state=0;
 
-
-  // put your setup code here, to run once:
   MIDI.begin();
   _note = 127;
   _velocity = 64;
@@ -56,24 +61,22 @@ void setup() {
 
 
   oled.init();
+  oled.setScale(2);
 
   oled.clear();
+  oled.print(adj[switch_state]);
+  oled.rect(velocity[switch_state]-10, 30, velocity[switch_state]+10, 35);
+  // oled.setCursor(0, 5);
+  // oled.print(velocity[switch_state]);
   oled.update();
 
-  oled.setScale(2);
-  // oled.home();
-  // oled.print("Hello!");
-  // oled.update();  
+  
+
 
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
-
-  //here we need to increment cnt on click and if more than adjlen, then make 0
-  // _channel = button0.getChoice() + 1;
 
   bool hasChanged=false;
 
@@ -89,28 +92,20 @@ void loop() {
     oled.clear();
     oled.home();
     oled.print(adj[switch_state]);
+    
     oled.update();
   }
   _channel = switch_state+1;
 
 
-  //encoder
 
   eb.tick();
   
 
   if (eb.turn()) {
         hasChanged=true;
-        // Serial.print("turn: dir ");
-        // Serial.print(eb.dir());
-        // Serial.print(", fast ");
-        // Serial.print(eb.fast());
-        // Serial.print(", hold ");
-        // Serial.print(eb.encHolding());
-        // Serial.print(", counter ");
-        // Serial.println(eb.counter);
 
-        velocity[switch_state] = velocity[switch_state] + ((1+eb.fast()*2)*eb.dir());
+        velocity[switch_state] = velocity[switch_state] + ((2+eb.fast()*2)*eb.dir());
         if(velocity[switch_state] > 127) velocity[switch_state]=127;
         if(velocity[switch_state] < 0) velocity[switch_state]=0;
 
@@ -122,25 +117,26 @@ void loop() {
     velocity[switch_state]=64;
   } 
   if(hasChanged){
-    MIDI.sendNoteOn(_note, velocity[switch_state], _channel);
+    MIDI.sendNoteOn(127, velocity[switch_state], switch_state+1);
     hasChanged=!hasChanged;
+    oled.rect(velocity[switch_state]-10, 30, velocity[switch_state]+10, 35);
+    oled.update(velocity[switch_state]-10 -6 , 30, velocity[switch_state]+10 + 6, 35);
+    oled.clear(velocity[switch_state]-10 -6 , 30, velocity[switch_state]+10 + 6, 35);
+    
   }
-  
 
 
+  // Serial.print(eb.fast());
+  // Serial.print(" ");
+  // Serial.print(velocity[0]);
+  // Serial.print(" ");
+  // Serial.print(velocity[1]);
+  // Serial.print(" ");
+  // Serial.print(velocity[2]);
+  // Serial.print(" ");
+  // Serial.print(velocity[3]);
+  // Serial.print(" ");
+  // Serial.println(velocity[4]);
 
-
-  // If the adjustment choice has changed, get the last known position
-  // Update the adjustment with the new position
-  // Check if button is pressed, and if already pressed, skip, else reset pos 
-  //range 0-127, save velocity for each channel
-  // _velocity = encoder0.update(button0.getChoice());
-  // To be moved into library
-
-  // if (!((_velocity_prev == _velocity) && (_channel_prev = _channel))) {
-  //     MIDI.sendNoteOn(_note, _velocity, _channel);
-  //     _velocity_prev = _velocity;
-  //     _channel_prev = _channel;
-  // }
 
 }

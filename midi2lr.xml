@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings>
+  <setting channel="1" note="127" command_string="Exposure"/>
+  <setting channel="2" note="127" command_string="Contrast"/>
+  <setting channel="5" note="127" command_string="Highlights"/>
+  <setting channel="3" note="127" command_string="Brightness"/>
+  <setting channel="4" note="127" command_string="Shadows"/>
+</settings>

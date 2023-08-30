@@ -69,11 +69,14 @@ void setup() {
 void loop() {
 
   bool hasChanged=false;
+  bool switched=false;
+
 
   switch_button.tick();
 
   int switch_state_prev=switch_state;
   if(switch_button.click()){
+    switched=true;
     hasChanged=true;
     switch_state = (switch_state+1)%adjlen;
   }
@@ -101,14 +104,16 @@ void loop() {
         // Serial.println(velocity[switch_state]);
         
   }
+
   if(eb.click()){
     hasChanged=true;
+    
     velocity[switch_state]=64;
     oled.clear(0 , 30, 127, 35);
     oled.update(0 , 30, 127, 35);
   } 
   if(hasChanged){
-    MIDI.sendNoteOn(127, velocity[switch_state], switch_state+1);
+    if(!switched) MIDI.sendNoteOn(127, velocity[switch_state], switch_state+1);
     hasChanged=!hasChanged;
     oled.rect(velocity[switch_state]-10, 30, velocity[switch_state]+10, 35);
     oled.update(velocity[switch_state]-10 -6 , 30, velocity[switch_state]+10 + 6, 35);

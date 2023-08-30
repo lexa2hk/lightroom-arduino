@@ -16,12 +16,19 @@ lightroom-arduino depends on a number of tools to convert incoming serial into M
 
 ## Libraries
 lightroom-arduino depends on a number of arduino libraries:
+- MIDI Library
+- GyverOLED
+- EncButton
 
-In future iterations of this project, the intention is to output MIDI directly over USB (e.g. Teensy), negating the need for the Hairless-MIDIserial and LoopMIDI software.
+In future iterations of this project, the intention is to output MIDI directly over USB (e.g. Arduino Pro Micro), negating the need for the Hairless-MIDIserial and LoopMIDI software.
 
+## Simulation
+
+Simulation made with Wokwi: 
+- [lightroom-arduino](https://wokwi.com/projects/374480138512988161)
 
 ## Setup
-Clone this library and upload the lightroom-arduino.ino example to your Arduino UNO. The Baud Rate is 115200.
+Clone this project and upload the lightroom-arduino.ino example to your Arduino UNO. The Baud Rate is 115200.
 
 
 Once this is setup, open LoopMIDI and open a port. 
@@ -39,3 +46,15 @@ Clicking the button will cycle the Channel `Ch` - this represents the selected a
 Open Lightroom and the MIDI2LR plugin. Turn the encoder, and map the input shown on MIDI2LR to the Lightroom adjustment shoown on the LCD. Click the button and repeat this process until all inputs channels are mapped. 
 
 Open a photo, and start editing!
+
+## Future of project
+
+- Sketch for UNO and NANO as separated branch
+- Refactoring for ProMicro
+- Encoder in simulation
+- Custom Boot Logo as a Bitmap
+- Photo switch buttons
+
+Probably:
+
+- Second encoder

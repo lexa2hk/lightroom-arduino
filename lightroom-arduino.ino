@@ -53,11 +53,6 @@ void setup() {
   switch_state=0;
 
   MIDI.begin();
-  _note = 127;
-  _velocity = 64;
-  _channel = 1;
-  _velocity_prev = 64;
-  _channel_prev = 1;
 
 
   oled.init();
@@ -66,12 +61,7 @@ void setup() {
   oled.clear();
   oled.print(adj[switch_state]);
   oled.rect(velocity[switch_state]-10, 30, velocity[switch_state]+10, 35);
-  // oled.setCursor(0, 5);
-  // oled.print(velocity[switch_state]);
   oled.update();
-
-  
-
 
 
 }
@@ -95,7 +85,6 @@ void loop() {
     
     oled.update();
   }
-  _channel = switch_state+1;
 
 
 
@@ -128,17 +117,6 @@ void loop() {
   }
 
 
-  // Serial.print(eb.fast());
-  // Serial.print(" ");
-  // Serial.print(velocity[0]);
-  // Serial.print(" ");
-  // Serial.print(velocity[1]);
-  // Serial.print(" ");
-  // Serial.print(velocity[2]);
-  // Serial.print(" ");
-  // Serial.print(velocity[3]);
-  // Serial.print(" ");
-  // Serial.println(velocity[4]);
 
 
 }

@@ -115,6 +115,8 @@ void loop() {
   if(eb.click()){
     hasChanged=true;
     velocity[switch_state]=64;
+    oled.clear(0 , 30, 127, 35);
+    oled.update(0 , 30, 127, 35);
   } 
   if(hasChanged){
     MIDI.sendNoteOn(127, velocity[switch_state], switch_state+1);
